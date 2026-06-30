@@ -55,7 +55,7 @@ templates = [
     "Заявка на тур оформлена на {name}. Контакты: {email}, {phone}. Адрес: {address}.",
     "Пользователь {name} подписался на рассылку. Контакт: {email}, {phone}.",
     "Клиент {name} изменил email на {email} и телефон на {phone}. Адрес остался: {address}.",
-    "Запрос на сертификат: {name}, {email}, {phone}, {address}. {email} {phone} {email}",
+    "Запрос на сертификат: {name}, {email}, {phone}, {address}.",
     "Клиент {name} оставил сообщение: «Мой email {email}, звоните по {phone} по поводу {address}.»",
     "Подтверждение регистрации: {name}, {email}, {phone}, {address}.",
     "Клиент {name} запросил копию договора. Контакты: {email}, {phone}, {address}.",
@@ -74,8 +74,7 @@ templates = [
     "Поддержка, помогите! Я {name}, мой email {email}, телефон {phone}, адрес {address}.",
     "Клиент {name} подтвердил получение посылки. Контакты: {email}, {phone}.",
     "Запрос на открытие счёта: {name}, {email}, {phone}, {address}.",
-    "Клиент {name} отменил визит. Контакты: {email}, {phone}, {address}.",
-    "Пользователь {name} сменил номер. Старый: {phone}, новый: {phone}. Email: {email}."
+    "Клиент {name} отменил визит. Контакты: {email}, {phone}, {address}."
 ]
 
 def generate_sample_with_entities():
@@ -129,17 +128,18 @@ def generate_sample_with_entities():
 
     return {"text": text, "entities": entities}
 
-def save_dataset(n_samples=1000, output_dir="data/processed"):
+def save_dataset(n_samples=1000, test_size=500, output_dir="data/processed"):
     os.makedirs(output_dir, exist_ok=True)
 
     data = []
-    for i in range(n_samples):
+    for i in range(n_samples+test_size):
         Faker.seed(i)
         data.append(generate_sample_with_entities())
 
-    split = int(0.8 * len(data))
+    split = int(0.8 * (len(data) - test_size))
     train_data = data[:split]
-    val_data = data[split:]
+    val_data = data[split:n_samples]
+    test_data = data[n_samples:]
 
     with open(os.path.join(output_dir, "train.jsonl"), "w", encoding="utf-8") as f:
         for item in train_data:
@@ -149,4 +149,11 @@ def save_dataset(n_samples=1000, output_dir="data/processed"):
         for item in val_data:
             f.write(json.dumps(item, ensure_ascii=False) + "\n")
 
-    print(f"Сохранено: {len(train_data)} в train, {len(val_data)} в val")
+    with open(os.path.join(output_dir, "test.jsonl"), "w", encoding="utf-8") as f:
+        for item in test_data:
+            f.write(json.dumps(item, ensure_ascii=False) + "\n")
+
+    print(f"Сохранено: {len(train_data)} в train, {len(val_data)} в val, {len(test_data)} в test")
+
+if __name__ == "__main__":
+    save_dataset()
