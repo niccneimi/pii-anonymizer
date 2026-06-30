@@ -39,6 +39,11 @@ def detect_pii(text, mode="ensemble"):
     elif mode == "use_gliner_only":       
         return gliner_predict(model, text)
 
+def mask_text(text, entities):
+    for ent in entities:
+        text = text[:ent['start']] + f"[{ent['label']}]" + text[ent['end']:]
+    return text
+
 if __name__ == "__main__":
     labels = ["PERSON", "EMAIL", "PHONE_NUMBER", "ADDRESS"]
     class_metrics = {cls: {"prec": [], "rec": [], "f1": []} for cls in labels}
