@@ -19,10 +19,14 @@ def calculate_tp_fp_fn(predict, true):
     return tp, fp, fn
 
 def precision(predict, true):
+    if len(predict) == 0 and len(true) == 0: 
+        return 1
     tp, fp, fn = calculate_tp_fp_fn(predict, true)
     return tp / (tp + fp) if (tp + fp) > 0 else 0
 
 def recall(predict, true):
+    if len(predict) == 0 and len(true) == 0: 
+        return 1
     tp, fp, fn = calculate_tp_fp_fn(predict, true)
     return tp / (tp + fn) if (tp + fn) > 0 else 0
 
