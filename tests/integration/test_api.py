@@ -1,0 +1,39 @@
+import requests
+from src.api.main import app
+
+class TestAnonymizeEndpoint:
+    def setup_method(self):
+        self.base_url = "http://localhost:8000/api"
+        self.anonymize_url = f"{self.base_url}/anonymize"
+        
+    def test_anonymize_ensemble_mode(self):
+        test_data = {
+            "text": "Поддержка, помогите! Я Сергеев Епифан Трифонович, мой email tamaraisakova@example.net, телефон +7 895 570 25 61, адрес с. Ребриха, ул. Большая",
+            "mode": "ensemble"
+        }
+
+        response = requests.post(
+            self.anonymize_url,
+            json=test_data,
+            headers={"Content-Type": "application/json"}
+        )
+        assert response.status_code == 200, f"Expected status code 200, got {response.status_code}"
+        
+        result = response.json()
+        assert "anonymized_text" in result, "Response should contain anonymized_text field"
+        
+        anonymized_text = result["anonymized_text"]
+        assert "[PERSON]" in anonymized_text, "Anonymized text should contain [PERSON] placeholder"
+        assert "[EMAIL]" in anonymized_text, "Anonymized text should contain [EMAIL] placeholder"
+        assert "[PHONE_NUMBER]" in anonymized_text, "Anonymized text should contain [PHONE] placeholder"
+        assert "[ADDRESS]" in anonymized_text, "Anonymized text should contain [ADDRESS] placeholder"
+        
+        original_pii = [
+            "Сергеев Епифан Трифонович",
+            "tamaraisakova@example.net",
+            "+7 895 570 25 61",
+            "с. Ребриха, ул. Большая"
+        ]
+        
+        for pii in original_pii:
+            assert pii not in anonymized_text, f"Original PII '{pii}' should not be present in anonymized text"
