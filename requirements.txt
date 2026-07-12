@@ -9,6 +9,7 @@ attrs==26.1.0
 certifi==2026.6.17
 charset-normalizer==3.4.7
 click==8.4.2
+coverage==7.15.0
 cuda-bindings==13.3.1
 cuda-pathfinder==1.5.5
 cuda-toolkit==13.0.2
@@ -65,6 +66,7 @@ pydantic==2.13.4
 pydantic_core==2.46.4
 Pygments==2.20.0
 pytest==9.1.1
+pytest-cov==7.1.0
 python-dateutil==2.9.0.post0
 PyYAML==6.0.3
 regex==2026.6.28
