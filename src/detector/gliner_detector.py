@@ -19,10 +19,10 @@ def gliner_predict(text, labels):
             'start': ent['start'],
             'end': ent['end'],
             'text': ent['text'],
-            'entity_type': ent['label'],
+            'label': ent['label'],
             'score': ent['score']
         })
     
-    predicted_entities = sorted(predicted_entities, key=lambda x: x['start'])
+    predicted_entities = sorted(predicted_entities, key=lambda x: x['start'], reverse=True)
     
     return predicted_entities

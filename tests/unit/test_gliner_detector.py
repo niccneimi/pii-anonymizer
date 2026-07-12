@@ -20,7 +20,7 @@ class TestGlinerDetector:
         if len(predictions) > 0:
             first_pred = predictions[0]
             assert "text" in first_pred, "Prediction should contain extracted text"
-            assert "entity_type" in first_pred, "Prediction should contain entity type"
+            assert "label" in first_pred, "Prediction should contain label"
             assert "score" in first_pred, "Prediction should contain confidence score"
             assert isinstance(first_pred["score"], float), "Score should be a float"
             assert 0 <= first_pred["score"] <= 1, "Score should be between 0 and 1"

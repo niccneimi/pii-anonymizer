@@ -18,7 +18,7 @@ class RegexDetector:
                 "start": m.start(),
                 "end": m.end(),
                 "text": m.group(),
-                "entity_type": "EMAIL"
+                "label": "EMAIL"
             }
             for m in re.finditer(email_pattern, text)
         ]
@@ -32,6 +32,6 @@ class RegexDetector:
                 "start": match.start(),
                 "end": match.end(),
                 "text": full_match,
-                "entity_type": "PHONE"
+                "label": "PHONE_NUMBER"
             })
         return matches

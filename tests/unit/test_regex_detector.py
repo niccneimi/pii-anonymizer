@@ -8,7 +8,7 @@ class TestRegexDetector:
         text = "Клиент отменил заказ. Контакты: foti_95@example.com"
         results = self.detector.detect(text)
         
-        email_entities = [ent for ent in results if ent["entity_type"] == "EMAIL"]
+        email_entities = [ent for ent in results if ent["label"] == "EMAIL"]
         assert len(email_entities) > 0, "No email entities detected"
         
         detected_emails = [ent["text"] for ent in email_entities]
@@ -21,7 +21,7 @@ class TestRegexDetector:
         text = "Клиент отменил заказ. Контакты: 8 208 159 91 19."
         results = self.detector.detect(text)
         
-        phone_entities = [ent for ent in results if ent["entity_type"] == "PHONE"]
+        phone_entities = [ent for ent in results if ent["label"] == "PHONE"]
         assert len(phone_entities) > 0, "No phone entities detected"
         
         detected_phones = [ent["text"] for ent in phone_entities]

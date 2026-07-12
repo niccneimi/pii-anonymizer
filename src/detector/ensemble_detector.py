@@ -1,20 +1,18 @@
 import json, os
 from collections import defaultdict
-from gliner import GLiNER
 from tqdm import tqdm
 
 from src.detector.gliner_detector import gliner_predict
 from src.detector.regex_detector import RegexDetector
 from src.monitoring import recall, precision, f1_score
 
-model = GLiNER.from_pretrained("models/gliner_pii") 
-
 def detect_pii(text, mode="ensemble"):
     if mode == "ensemble":
         regex_detector = RegexDetector()
-        gliner_entities = gliner_predict(model, text)
+        gliner_entities = gliner_predict(text, ["PERSON", "EMAIL", "PHONE_NUMBER", "ADDRESS"])
         regex_entities = regex_detector.detect(text)
 
+        print(gliner_entities)
         final_entities = []
         for ent in regex_entities:
             if ent["label"] in ["EMAIL", "PHONE_NUMBER"]:
@@ -39,7 +37,7 @@ def detect_pii(text, mode="ensemble"):
         regex_detector = RegexDetector()
         return regex_detector.detect(text)
     elif mode == "use_gliner_only":       
-        return gliner_predict(model, text)
+        return gliner_predict(text, ["PERSON", "EMAIL", "PHONE_NUMBER", "ADDRESS"])
 
 def mask_text(text, entities):
     for ent in entities:
