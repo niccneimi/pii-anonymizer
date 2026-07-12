@@ -4,15 +4,16 @@ from gliner import GLiNER
 from tqdm import tqdm
 
 from src.detector.gliner_detector import gliner_predict
-from src.detector.regex_detector import find_pii
+from src.detector.regex_detector import RegexDetector
 from src.monitoring import recall, precision, f1_score
 
 model = GLiNER.from_pretrained("models/gliner_pii") 
 
 def detect_pii(text, mode="ensemble"):
     if mode == "ensemble":
+        regex_detector = RegexDetector()
         gliner_entities = gliner_predict(model, text)
-        regex_entities = find_pii(text)
+        regex_entities = regex_detector.detect(text)
 
         final_entities = []
         for ent in regex_entities:
@@ -35,7 +36,8 @@ def detect_pii(text, mode="ensemble"):
         final_entities.sort(key=lambda x: x["start"], reverse=True)
         return final_entities
     elif mode == "use_regex_only":
-        return find_pii(text)
+        regex_detector = RegexDetector()
+        return regex_detector.detect(text)
     elif mode == "use_gliner_only":       
         return gliner_predict(model, text)
 
