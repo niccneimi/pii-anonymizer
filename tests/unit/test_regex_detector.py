@@ -21,7 +21,7 @@ class TestRegexDetector:
         text = "Клиент отменил заказ. Контакты: 8 208 159 91 19."
         results = self.detector.detect(text)
         
-        phone_entities = [ent for ent in results if ent["label"] == "PHONE"]
+        phone_entities = [ent for ent in results if ent["label"] == "PHONE_NUMBER"]
         assert len(phone_entities) > 0, "No phone entities detected"
         
         detected_phones = [ent["text"] for ent in phone_entities]
