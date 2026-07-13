@@ -12,7 +12,6 @@ def detect_pii(text, mode="ensemble"):
         gliner_entities = gliner_predict(text, ["PERSON", "EMAIL", "PHONE_NUMBER", "ADDRESS"])
         regex_entities = regex_detector.detect(text)
 
-        print(gliner_entities)
         final_entities = []
         for ent in regex_entities:
             if ent["label"] in ["EMAIL", "PHONE_NUMBER"]:
