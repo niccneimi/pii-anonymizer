@@ -1,12 +1,20 @@
 import requests
-from src.api.main import app
+from unittest.mock import patch
 
 class TestAnonymizeEndpoint:
     def setup_method(self):
         self.base_url = "http://localhost:8000/api"
         self.anonymize_url = f"{self.base_url}/anonymize"
         
-    def test_anonymize_ensemble_mode(self):
+    @patch('src.api.routes.detect_pii')
+    def test_anonymize_ensemble_mode(self, mock_gliner_predict):
+        mock_gliner_predict.return_value = [
+            {"text": "Сергеев Епифан Трифонович", "label": "PERSON", "start": 22, "end": 48},
+            {"text": "tamaraisakova@example.net", "label": "EMAIL", "start": 58, "end": 83},
+            {"text": "+7 895 570 25 61", "label": "PHONE_NUMBER", "start": 93, "end": 111},
+            {"text": "с. Ребриха, ул. Большая", "label": "ADDRESS", "start": 121, "end": 145},
+        ]
+
         test_data = {
             "text": "Поддержка, помогите! Я Сергеев Епифан Трифонович, мой email tamaraisakova@example.net, телефон +7 895 570 25 61, адрес с. Ребриха, ул. Большая",
             "mode": "ensemble"
