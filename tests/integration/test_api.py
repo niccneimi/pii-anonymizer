@@ -5,8 +5,8 @@ from fastapi.testclient import TestClient
 
 class TestAnonymizeEndpoint:
     def setup_method(self):
-        self.base_url = TestClient(app)
-        self.anonymize_url = f"{self.base_url}/anonymize"
+        self.client = TestClient(app)
+        self.anonymize_url = "/api/anonymize"
         
     @patch('src.detector.ensemble_detector.detect_pii')
     def test_anonymize_ensemble_mode(self, mock_gliner_predict):
@@ -22,11 +22,11 @@ class TestAnonymizeEndpoint:
             "mode": "ensemble"
         }
 
-        response = requests.post(
+        response = self.client.post(
             self.anonymize_url,
-            json=test_data,
-            headers={"Content-Type": "application/json"}
+            json=test_data
         )
+
         assert response.status_code == 200, f"Expected status code 200, got {response.status_code}"
         
         result = response.json()
