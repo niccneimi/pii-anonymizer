@@ -8,7 +8,7 @@ class TestAnonymizeEndpoint:
         self.client = TestClient(app)
         self.anonymize_url = "/api/anonymize"
         
-    @patch('src.detector.ensemble_detector.detect_pii')
+    @patch('src.api.routes.detect_pii')
     def test_anonymize_ensemble_mode(self, mock_gliner_predict):
         mock_gliner_predict.return_value = [
             {"text": "Сергеев Епифан Трифонович", "label": "PERSON", "start": 22, "end": 48},
