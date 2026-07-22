@@ -22,7 +22,7 @@ jobs:
 
       - name: Start server
         run: |
-          python src/api/main.py &
+          python -m src.api.main &
           sleep 10
       
       - name: Run tests with coverage
