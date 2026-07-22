@@ -1,9 +1,11 @@
 import requests
 from unittest.mock import patch
+from src.api.main import app
+from fastapi.testclient import TestClient
 
 class TestAnonymizeEndpoint:
     def setup_method(self):
-        self.base_url = "http://localhost:8000/api"
+        self.base_url = TestClient(app)
         self.anonymize_url = f"{self.base_url}/anonymize"
         
     @patch('src.detector.ensemble_detector.detect_pii')

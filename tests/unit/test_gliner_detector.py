@@ -5,7 +5,7 @@ import pytest
 class TestGlinerDetector:
 
     @pytest.mark.skipif(
-    not os.path.exists("models/gliner_pii_1"),
+    not os.path.exists("models/gliner_pii"),
     reason="GLiNER model not found locally")
     def test_model_loading(self):
         result = gliner_predict("Test text", ["PERSON"])
@@ -16,7 +16,7 @@ class TestGlinerDetector:
         assert isinstance(empty_result, list), "Model should handle empty text"
 
     @pytest.mark.skipif(
-    not os.path.exists("models/gliner_pii_1"),
+    not os.path.exists("models/gliner_pii"),
     reason="GLiNER model not found locally")
     def test_prediction_on_short_text(self):
         short_text = "Почта Марины Степановны marianskaya_vpadina@gmail.com"
