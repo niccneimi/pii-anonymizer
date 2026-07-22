@@ -19,6 +19,11 @@ jobs:
 
       - name: Install project
         run: pip install -e .
+
+      - name: Start server
+        run: |
+          python src/api/main.py &
+          sleep 10
       
       - name: Run tests with coverage
         run: pytest tests/ --cov=src --cov-report=xml --cov-report=term
